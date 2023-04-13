@@ -49,19 +49,7 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  var result;
-  var result2;
-
-  static const platform =
-      const MethodChannel("com.example.native_android_sdcard_io5/toast");
-  Future getToast() async {
-    try {
-      result = await platform.invokeMethod('load');
-      print(result);
-    } on PlatformException catch (e) {
-      print(e.message);
-    }
-  }
+  var result2 = "hj";
 
   @override
   Widget build(BuildContext context) {
@@ -91,32 +79,49 @@ class _MyHomePageState extends State<MyHomePage> {
               height: 200,
               child: Padding(
                 padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-                child: TextField(
-                  maxLines: null,
-                  expands: true,
-                  keyboardType: TextInputType.multiline,
-                  decoration: InputDecoration(
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(6),
-                        borderSide: BorderSide(color: Colors.black54),
-                      ),
-                      hintText: 'enter text here'),
-                ),
+
               ),
             ),
             Padding(
               padding: const EdgeInsets.only(top: 8.0, bottom: 8.0),
-              child: ElevatedButton(
-                  onPressed: () {
-                    getToast();
-                  },
-                  child: Text('LOAD6')),
+              child:
+                  ElevatedButton(onPressed: () => load(), child: Text('LOAD6')),
             ),
-            ElevatedButton(onPressed: () {}, child: Text('SAVE')),
+            ElevatedButton(onPressed: () => save(), child: Text('SAVE')),
+
+            Text("fetched data from native android sd card file : $result2")
           ],
         ),
       ),
       // This trailing comma makes auto-formatting nicer for build methods.
     );
   }
+
+  Future<void> load() async {
+    var result;
+
+    const platform =
+        const MethodChannel("com.example.native_android_sdcard_io5/toast");
+    try {
+      result = await platform.invokeMethod("load");
+      print(result);
+      setState(() {
+        result2 = result;
+      });
+    } on PlatformException catch (e) {
+      print(e.message);
+    }
+  }
+
+  Future<void>save() async{
+  const platform =
+  const MethodChannel("com.example.native_android_sdcard_io5/toast");
+  try {
+  var result = await platform.invokeMethod("save");
+
+  } on PlatformException catch (e) {
+  print(e.message);
+  }
+
+}
 }
